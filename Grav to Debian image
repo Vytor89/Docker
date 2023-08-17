@@ -20,5 +20,11 @@
    
     #enabled necessary settings in apache
     run  systemctl enable apache2; a2enmod rewrite; systemctl start apache2; 
-    run a2dissite 000-default.conf; a2ensite grav.conf; systemctl reload apache2; systemctl start apache2;
+    run a2dissite 000-default.conf; a2ensite grav.conf; systemctl reload apache2;
+
+    #inside the directory, use the command in the terminal
+    docker build . --tag grav-debian
+
+    #definition of name for image **<grav-debian>**, execute command in terminal
+    docker run -tid --name grav  -p 80:80 grav-debian  systemctl start apache2
 
