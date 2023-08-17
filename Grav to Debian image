@@ -1,0 +1,24 @@
+    #selection the image
+    From debian:latest 
+
+    # Command in operantion
+    
+    #update and upgrade image
+    run apt update && apt upgrade -y
+    
+    #install all necessary packages 
+    run apt install apache2 -y && apt install zip -y && apt install php php-zip php-xml php-mbstring php-gd php-curl php-dom -y && apt install wget -y && apt install systemctl -y;
+    
+    #search the system Grav with Grav's administrative plugin 
+    run wget https://getgrav.org/download/core/grav-admin/1.7.42.3/grav-admin-v1.7.42.zip; unzip grav-admin-v1.7.42.zip; mv grav-admin /var/www/
+
+    #permission and replacement user/group in directory 
+    run chmod -R 755 /var/www/grav-admin/; chown -R www-data:www-data /var/www/grav-admin/
+
+    #create document for apache2
+    run echo "<VirtualHost *:80> \n DocumentRoot /var/www/grav-admin \n <directory /var/www/grav-admin> \n allowoverride all \n allow from all \n </directory> \n </VirtualHost> " > /etc/apache2/sites-available/grav.conf
+   
+    #enabled necessary settings in apache
+    run  systemctl enable apache2; a2enmod rewrite; systemctl start apache2; 
+    run a2dissite 000-default.conf; a2ensite grav.conf; systemctl reload apache2; systemctl start apache2;
+
